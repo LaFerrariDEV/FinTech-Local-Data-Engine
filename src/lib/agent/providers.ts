@@ -34,6 +34,16 @@ export const PROVIDER_PRESETS: ProviderPreset[] = [
     note: "OpenAI Chat Completions API with function calling.",
   },
   {
+    id: "bazaarlink",
+    label: "BazaarLink",
+    kind: "openai-compatible",
+    baseUrl: "https://api.bazaarlink.ai/v1",
+    defaultModel: "qwen/qwen3.7-flash:free",
+    modelPlaceholder: "provider/model, e.g. qwen/qwen3.7-flash:free",
+    needsKey: true,
+    note: "OpenAI-compatible gateway. Paste your sk-bl-… key; it is kept in this browser only.",
+  },
+  {
     id: "ollama",
     label: "Ollama (local)",
     kind: "openai-compatible",

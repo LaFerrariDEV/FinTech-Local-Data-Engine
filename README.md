@@ -9,6 +9,8 @@ drive the same engine through tools.
 > Block 1 of the QuantAgent roadmap: the data engine, ingestion, visualization and validation
 > layers, plus a first agent layer on top.
 
+**Live demo:** https://laferraridev.github.io/FinTech-Local-Data-Engine/ (static build, deployed from `main` by GitHub Actions)
+
 ## Screenshots
 
 | 1,000,000-row CSV upload, resampled chart with indicators | SQL console |
@@ -96,6 +98,17 @@ npm run build
 npm start
 ```
 
+### Static deployment (GitHub Pages)
+
+The workbench is fully client-side, so it also ships as a static site:
+
+```bash
+STATIC_EXPORT=1 NEXT_PUBLIC_BASE_PATH=/FinTech-Local-Data-Engine npm run build
+```
+
+The `out/` folder can be served by any static host. `.github/workflows/pages.yml` builds and
+deploys it on every push to `main` (one-time setup: Settings → Pages → Source: GitHub Actions).
+
 ### Agent providers
 
 Open the ⚙ in the Agent panel:
@@ -104,6 +117,7 @@ Open the ⚙ in the Agent panel:
   browser to `api.anthropic.com`.
 * **Ollama / LM Studio** — fully local. Pick a tool-calling model. Ollama accepts `localhost`
   origins by default; for other origins set `OLLAMA_ORIGINS`.
+* **BazaarLink** — preset for `https://api.bazaarlink.ai/v1` (default model `qwen/qwen3.7-flash:free`); paste your `sk-bl-…` key.
 * **OpenAI / OpenRouter / custom** — any OpenAI-compatible `/chat/completions` endpoint with tools.
 
 Keys are kept in memory unless you enable “Remember key”, which stores them in this browser's

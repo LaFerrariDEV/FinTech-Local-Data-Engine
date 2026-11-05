@@ -48,7 +48,8 @@ export function EngineProvider({ children }: { children: React.ReactNode }) {
     const persistNow = readPersist();
     const engine = new EngineClient({
       createWorker: () => new Worker(new URL("../../lib/engine/engine.worker.ts", import.meta.url), { type: "module", name: "quantagent-engine" }),
-      init: { assetBaseUrl: `${window.location.origin}/duckdb`, persist: persistNow, debug },
+      // NEXT_PUBLIC_BASE_PATH is inlined at build time (e.g. "/FinTech-Local-Data-Engine" on GitHub Pages).
+      init: { assetBaseUrl: `${window.location.origin}${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/duckdb`, persist: persistNow, debug },
       bootTimeoutMs: 90_000,
       heartbeatMs: 5_000,
     });
