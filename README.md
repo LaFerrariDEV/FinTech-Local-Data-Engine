@@ -9,6 +9,14 @@ drive the same engine through tools.
 > Block 1 of the QuantAgent roadmap: the data engine, ingestion, visualization and validation
 > layers, plus a first agent layer on top.
 
+## Screenshots
+
+| 1,000,000-row CSV upload, resampled chart with indicators | SQL console |
+| --- | --- |
+| ![1M-row upload](docs/screenshots/1-upload-1M-rows-chart.png) | ![SQL console](docs/screenshots/3-sql-console.png) |
+| **Backtest analytics** | **Malformed CSV → quarantine report** |
+| ![Backtest](docs/screenshots/4-backtest.png) | ![Quality](docs/screenshots/6-quality-quarantined-rows.png) |
+
 ## Highlights
 
 | Area | What you get |

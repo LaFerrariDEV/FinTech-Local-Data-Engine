@@ -228,7 +228,9 @@ export function BacktestPanel() {
 function Kpi({ label, value, sub, tone }: { label: string; value: string; sub?: string; tone?: "good" | "bad" }) {
   return (
     <div className="flex min-w-0 flex-col gap-0.5 rounded-md border border-border bg-panel px-2.5 py-2">
-      <span className="panel-title truncate">{label}</span>
+      <span className="panel-title truncate" title={label}>
+        {label}
+      </span>
       <span className={cn("num truncate text-base font-semibold", tone === "good" && "text-[#6fd36f]", tone === "bad" && "text-[#f08a8a]")}>{value}</span>
       {sub && <span className="num truncate text-[10.5px] text-muted-foreground">{sub}</span>}
     </div>
@@ -249,10 +251,10 @@ function BacktestResults({ result }: { result: BacktestResult }) {
         <Kpi label="CAGR" value={formatPct(m.cagr, 2, true)} sub={`B&H ${formatPct(b.cagr, 2, true)}`} tone={tone(m.cagr)} />
         <Kpi label="Sharpe" value={formatNumber(m.sharpe, 2)} sub={`B&H ${formatNumber(b.sharpe, 2)}`} />
         <Kpi label="Sortino" value={formatNumber(m.sortino, 2)} sub={`Calmar ${formatNumber(m.calmar, 2)}`} />
-        <Kpi label="Max drawdown" value={formatPct(m.maxDrawdown)} sub={`B&H ${formatPct(b.maxDrawdown)}`} tone={m.maxDrawdown < 0 ? "bad" : undefined} />
+        <Kpi label="Max DD" value={formatPct(m.maxDrawdown)} sub={`B&H ${formatPct(b.maxDrawdown)}`} tone={m.maxDrawdown < 0 ? "bad" : undefined} />
         <Kpi label="Volatility" value={formatPct(m.volatility)} sub="annualized" />
         <Kpi label="Trades" value={formatInt(m.trades)} sub={`win ${formatPct(m.winRate, 1)}`} />
-        <Kpi label="Profit factor" value={formatNumber(m.profitFactor, 2)} sub={`exposure ${formatPct(m.exposure, 0)}`} />
+        <Kpi label="Profit fac." value={formatNumber(m.profitFactor, 2)} sub={`exposure ${formatPct(m.exposure, 0)}`} />
       </div>
       <div className="h-80 overflow-hidden rounded-md border border-border">
         <EquityChart result={result} />

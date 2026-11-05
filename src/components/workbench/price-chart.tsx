@@ -158,12 +158,16 @@ export function PriceChart({ bars, intraday }: Props) {
     chart.applyOptions({ timeScale: { timeVisible: intraday, secondsVisible: false } });
 
     const n = bars.time.length;
+    // Dense charts: fainter volume so thousands of adjacent bars don't form a solid band over price.
+    const volAlpha = n > 5000 ? 0.14 : n > 1500 ? 0.2 : 0.28;
+    const volUp = `rgba(12,163,12,${volAlpha})`;
+    const volDown = `rgba(208,59,59,${volAlpha})`;
     const candles = new Array(n);
     const volume = new Array(n);
     for (let i = 0; i < n; i++) {
       const t = bars.time[i] as UTCTimestamp;
       candles[i] = { time: t, open: bars.open[i], high: bars.high[i], low: bars.low[i], close: bars.close[i] };
-      volume[i] = { time: t, value: bars.volume[i], color: bars.close[i] >= bars.open[i] ? "rgba(12,163,12,0.28)" : "rgba(208,59,59,0.28)" };
+      volume[i] = { time: t, value: bars.volume[i], color: bars.close[i] >= bars.open[i] ? volUp : volDown };
     }
     const candle = chart.addSeries(CandlestickSeries, {
       upColor: UP,
@@ -177,7 +181,7 @@ export function PriceChart({ bars, intraday }: Props) {
     candle.setData(candles);
     seriesRef.current.push(candle);
     const vol = chart.addSeries(HistogramSeries, { priceScaleId: "vol", priceFormat: { type: "volume" }, lastValueVisible: false, priceLineVisible: false });
-    vol.priceScale().applyOptions({ scaleMargins: { top: 0.82, bottom: 0 } });
+    vol.priceScale().applyOptions({ scaleMargins: { top: n > 5000 ? 0.88 : 0.82, bottom: 0 } });
     vol.setData(volume);
     seriesRef.current.push(vol);
 

@@ -33,6 +33,33 @@ test.describe("ingestion", () => {
     expect(frames.max).toBeLessThan(500);
   });
 
+  test("accepts real drag-and-drop on the drop zone and anywhere on the window", async ({ page }) => {
+    await openWorkbench(page);
+    const drop = async (selector: string, name: string, csv: string) => {
+      const dataTransfer = await page.evaluateHandle(
+        ({ n, text }) => {
+          const dt = new DataTransfer();
+          dt.items.add(new File([text], n, { type: "text/csv" }));
+          return dt;
+        },
+        { n: name, text: csv },
+      );
+      await page.dispatchEvent(selector, "dragenter", { dataTransfer });
+      await page.dispatchEvent(selector, "dragover", { dataTransfer });
+      await page.dispatchEvent(selector, "drop", { dataTransfer });
+    };
+    await drop("[data-testid=drop-zone]", "zone_drop.csv", ohlcvCsv(250));
+    await waitForDataset(page, "zone_drop");
+    // Dropping onto the chart area uses the full-window drop target.
+    await drop("main", "window_drop.csv", ohlcvCsv(300));
+    await waitForDataset(page, "window_drop");
+    const [r] = await sql(page, "SELECT (SELECT count(*) FROM zone_drop) AS a, (SELECT count(*) FROM window_drop) AS b");
+    expect(r).toEqual({ a: 250, b: 300 });
+    // Each file is ingested exactly once (no double handling by the zone and window listeners).
+    const names = await page.evaluate(() => window.__quantagent!.store.getState().datasets.map((d) => d.name).sort());
+    expect(names).toEqual(["window_drop", "zone_drop"]);
+  });
+
   test("keeps very long lines and quoted multi-line fields intact", async ({ page }) => {
     const big = "x".repeat(6 * 1024 * 1024);
     const lines = ["date,close,note"];

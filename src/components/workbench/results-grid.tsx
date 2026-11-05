@@ -8,6 +8,21 @@ import { cn } from "@/lib/utils";
 
 const ROW_HEIGHT = 24;
 
+/** Compact, SQL-flavoured label for an Arrow type string ("Float64" -> "double"). */
+function shortType(type: string): string {
+  const t = type.replace(/<.*>/, "").toLowerCase();
+  if (t.startsWith("float")) return "double";
+  if (t.startsWith("int") || t.startsWith("uint")) return "int";
+  if (t.startsWith("utf8") || t.startsWith("largeutf8") || t.startsWith("dictionary")) return "text";
+  if (t.startsWith("timestamp")) return "timestamp";
+  if (t.startsWith("date")) return "date";
+  if (t.startsWith("bool")) return "bool";
+  if (t.startsWith("decimal")) return "decimal";
+  if (t.startsWith("list")) return "list";
+  if (t.startsWith("struct")) return "struct";
+  return t;
+}
+
 function cellText(col: ResultColumn, row: number): { text: string; isNull: boolean } {
   if (col.numbers) {
     const v = col.numbers[row];
@@ -30,7 +45,8 @@ export function ResultsGrid({ columns, rowCount }: { columns: ResultColumn[]; ro
   const widths = React.useMemo(
     () =>
       columns.map((c) => {
-        let max = c.name.length + 4;
+        // Header shows "name  type", so size for both.
+        let max = c.name.length + shortType(c.type).length + 2;
         const sample = Math.min(rowCount, 200);
         for (let i = 0; i < sample; i++) max = Math.max(max, Math.min(48, cellText(c, i).text.length));
         return Math.min(360, Math.max(72, max * 7.2 + 16));
@@ -52,7 +68,7 @@ export function ResultsGrid({ columns, rowCount }: { columns: ResultColumn[]; ro
           {columns.map((c, i) => (
             <div key={c.name + i} role="columnheader" style={{ width: widths[i] }} className="shrink-0 truncate border-l border-border px-2 py-1" title={`${c.name} · ${c.type}`}>
               <span className="font-semibold text-foreground">{c.name}</span>
-              <span className="ml-1.5 text-[10px] text-muted-foreground">{c.type.replace(/<.*>/, "")}</span>
+              <span className="ml-1.5 text-[10px] text-muted-foreground">{shortType(c.type)}</span>
             </div>
           ))}
         </div>

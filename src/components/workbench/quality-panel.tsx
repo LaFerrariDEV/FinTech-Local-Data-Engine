@@ -114,7 +114,7 @@ export function QualityPanel() {
                         <tr key={i} className="border-t border-border/50">
                           {keys.map((k) => (
                             <td key={k} className="max-w-xs truncate px-2 py-0.5">
-                              {ex[k] == null ? "" : typeof ex[k] === "number" ? formatNumber(ex[k] as number) : String(ex[k])}
+                              {ex[k] == null ? "" : typeof ex[k] === "number" ? (Number.isInteger(ex[k]) ? formatInt(ex[k] as number) : formatNumber(ex[k] as number)) : String(ex[k])}
                             </td>
                           ))}
                         </tr>
