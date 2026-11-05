@@ -1,0 +1,170 @@
+@import "tailwindcss";
+
+/*
+ * QuantAgent terminal theme. Dense, dark-first financial UI built on shadcn/ui-style tokens.
+ * Chart series colors were validated (CVD + contrast) against --panel (#101114).
+ */
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  color-scheme: dark;
+  --radius: 0.375rem;
+
+  --background: #0a0b0d;
+  --foreground: #e6e7ea;
+  --panel: #101114;
+  --panel-2: #15171b;
+  --card: #101114;
+  --card-foreground: #e6e7ea;
+  --popover: #121418;
+  --popover-foreground: #e6e7ea;
+  --primary: #3987e5;
+  --primary-foreground: #f6f8fb;
+  --secondary: #1b1e23;
+  --secondary-foreground: #d5d7dc;
+  --muted: #171a1e;
+  --muted-foreground: #8b909a;
+  --accent: #1d2127;
+  --accent-foreground: #e6e7ea;
+  --destructive: #d03b3b;
+  --destructive-foreground: #fff5f5;
+  --border: #23262c;
+  --input: #2a2e35;
+  --ring: #3987e5;
+
+  --good: #0ca30c;
+  --warning: #fab219;
+  --serious: #ec835a;
+  --critical: #d03b3b;
+
+  /* Categorical chart slots (dark steps), fixed order. */
+  --series-1: #3987e5;
+  --series-2: #d95926;
+  --series-3: #9085e9;
+  --series-4: #d55181;
+  --series-5: #c98500;
+  --series-6: #199e70;
+
+  --candle-up: #0ca30c;
+  --candle-down: #d03b3b;
+  --grid: #1a1d22;
+  --axis: #6b7079;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-panel: var(--panel);
+  --color-panel-2: var(--panel-2);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-good: var(--good);
+  --color-warning: var(--warning);
+  --color-serious: var(--serious);
+  --color-critical: var(--critical);
+  --color-series-1: var(--series-1);
+  --color-series-2: var(--series-2);
+  --color-series-3: var(--series-3);
+  --color-series-4: var(--series-4);
+  --color-series-5: var(--series-5);
+  --color-series-6: var(--series-6);
+  --radius-sm: calc(var(--radius) - 2px);
+  --radius-md: var(--radius);
+  --radius-lg: calc(var(--radius) + 2px);
+  --font-sans: ui-sans-serif, "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, "JetBrains Mono", "SF Mono", "Cascadia Code", Menlo, Consolas, monospace;
+}
+
+@layer base {
+  * {
+    border-color: var(--border);
+  }
+  html,
+  body {
+    height: 100%;
+  }
+  body {
+    background: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans);
+    font-size: 13px;
+    font-feature-settings: "tnum" 1, "cv11" 1;
+    -webkit-font-smoothing: antialiased;
+  }
+  ::selection {
+    background: color-mix(in srgb, var(--primary) 35%, transparent);
+  }
+  *::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  *::-webkit-scrollbar-thumb {
+    background: #2a2e35;
+    border-radius: 8px;
+  }
+  *::-webkit-scrollbar-track {
+    background: transparent;
+  }
+}
+
+@layer utilities {
+  .num {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+  }
+  .panel-title {
+    font-size: 10.5px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted-foreground);
+    font-weight: 600;
+  }
+}
+
+/* CodeMirror terminal styling */
+.cm-editor {
+  height: 100%;
+  background: var(--panel);
+  font-size: 12.5px;
+}
+.cm-editor.cm-focused {
+  outline: none;
+}
+.cm-scroller {
+  font-family: var(--font-mono) !important;
+  line-height: 1.55;
+}
+.cm-gutters {
+  background: var(--panel) !important;
+  border-right: 1px solid var(--border) !important;
+  color: #4b5059 !important;
+}
+.cm-activeLine,
+.cm-activeLineGutter {
+  background: color-mix(in srgb, var(--primary) 7%, transparent) !important;
+}
+.cm-tooltip {
+  background: var(--popover) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 6px;
+}
+.cm-tooltip-autocomplete > ul > li[aria-selected] {
+  background: color-mix(in srgb, var(--primary) 30%, transparent) !important;
+  color: var(--foreground) !important;
+}
